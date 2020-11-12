@@ -4,6 +4,7 @@ import pickle
 import angles as ang
 from sklearn.cluster import KMeans
 
+#this will be the 26-feature series of vectors
 rows = []
 
 directory = '../sample_data/left_middle_block_sample'
