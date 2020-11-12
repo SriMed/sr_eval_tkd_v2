@@ -5,6 +5,7 @@
 import numpy as np
 import math
 import json
+import pickle
 
 body_25_num_joints = 25
 
@@ -27,7 +28,7 @@ bt_joints = {
 
 #note that the returned angle will be in radians
 #where coordinates is a numpy array
-def calculate_angles(angle_jgroup, coordinates):
+def calc_angle(angle_jgroup, coordinates):
     angles = {}
     for i in angle_jgroup:
         s,c,e = angle_jgroup[i]
@@ -37,18 +38,25 @@ def calculate_angles(angle_jgroup, coordinates):
 
         dot_product = sum(s_hat[0][i]*e_hat[0][i] for i in range(len(s_hat[0])))
         alpha = math.acos((dot_product)/(np.linalg.norm(s_hat)*np.linalg.norm(e_hat)))
-        angles[i] = alpha
+
+        str = f'{alpha}'
+        if any(c.isdigit() for c in str) == False:
+            # print('nan here?')
+            angles[i] = 0
+        else:
+            angles[i] = alpha
     return angles
 
-def testing(ij):
+#given filename with frame.json, gets angles
+def get_angles(ij):
     with open(ij) as json_file:
         frame = json.load(json_file)
 
     coord = frame['people'][0]['pose_keypoints_2d']
     coord = {(k/3):np.array([coord[k:k+2]]) for k in range(0, len(coord),3)}
 
-    ang = calculate_angles(bt_joints, coord)
-    print(ang)
+    ang = calc_angle(bt_joints, coord)
+    return ang
 
-
-testing('sample_output.json')
+# angles = get_angles('sample_output.json')
+# pickle.dump(angles, open('sample_angles.p', 'wb'))
