@@ -1,7 +1,6 @@
 import os
 import numpy as np
-import pickle
-import angles as ang
+from Archive import angles as ang
 from sklearn.cluster import KMeans
 
 #this will be the 26-feature series of vectors
@@ -16,5 +15,5 @@ X = np.array(rows)
 
 kmeans = KMeans(n_clusters=2, random_state=0).fit(X)
 
-print(kmeans.labels_)
+# print(kmeans.labels_)
 print(kmeans.cluster_centers_)
