@@ -44,6 +44,7 @@ def get_frame_angles(frame):
     ang = calc_angle(h36m_joints, frame)
     return ang
 
+#rerturns a series of 14d arrays (angles in radians)
 def get_angles(data):
     ang = np.empty((len(data),len(h36m_joints)))
     for i, d in enumerate(data):
@@ -51,7 +52,7 @@ def get_angles(data):
         ang[i] = f_ang
     return ang
 
-data = np.load('xy_Static/hb_ll_9.npy')
-# print(data)
-ang = get_angles(data)
-print(ang)
+# data = np.load('xy_Static/hb_ll_9.npy')
+# # print(data)
+# ang = get_angles(data)
+# print(ang)
