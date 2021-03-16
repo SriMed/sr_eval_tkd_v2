@@ -52,7 +52,7 @@ def get_angles(data):
         ang[i] = f_ang
     return ang
 
-# data = np.load('xy_Static/hb_ll_9.npy')
-# # print(data)
-# ang = get_angles(data)
-# print(ang)
+data = np.load('xy_Static/hb_ll_9.npy')
+# print(data)
+ang = get_angles(data)
+print(ang)
