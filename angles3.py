@@ -55,4 +55,4 @@ def get_angles(data):
 data = np.load('xy_Static/hb_ll_9.npy')
 # print(data)
 ang = get_angles(data)
-print(ang)
+# print(ang)
