@@ -72,15 +72,16 @@ def classify_videos(ips, tech):
             else:
                 tally[m] += 1
 
-        # for w in sorted(tally, key=tally.get, reverse=True):
-            # print(w, tally[w])
-
-        final_res.append(max(tally, key=tally.get))
+        for w in sorted(tally, key=tally.get, reverse=True):
+            print(w, tally[w])
+            # final_res.append(tally.values())
+        maxvote_move = max(tally, key=tally.get)
+        final_res.append((maxvote_move, f'{tally[maxvote_move]}/{sum(tally.values())}'))
     return final_res
 
 def print_res(ips, final_res):
     for ip, fr in zip(ips, final_res):
-        print(f'{ip}\t|\t{fr}')
+        print(f'{ip}\t|\t{fr[0]}\t{fr[1]}')
 
 ips = ['xy_Static/IMG_5002_si.npy', 'xy_Static/fk_rd_0_si.npy', 'xy_Static/fk_rd_1_si.npy']
 tech = ['h', 'k', 'k']
