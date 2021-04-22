@@ -3,12 +3,12 @@ import os
 import numpy as np
 import random
 from sklearn.neighbors import KNeighborsClassifier
-from gen_kmeans import get_cluster_centroids
+from angles3 import get_angles
 
 # identifiers = pickle.load(open('xy_Static/identifiers2move.p', 'rb'))
 
-hand_vp = 20
-kick_vp = 24
+hand_vp = 10
+kick_vp = 12
 
 hand_techniques = ["High block", "Middle block (in-to-out)", "Middle block (out-to-in)", "Knife hand block", "Low block", "Punch (middle-level)", "High punch (face-level)"]
 kicking_techniques = ["Front kick", "Round kick", "Side kick"]
@@ -68,15 +68,17 @@ def classify_videos(ips, tech, ks_name, new_ids=False):
 
     final_res = []
     for i, ip in enumerate(ips):
-        if tech[i] == 'h':
-            num_vp = int(suffix[suffix.find('h')+1:suffix.find('k')])
-        else:
-            num_vp = int(suffix[suffix.find('k')+1:])
+        # if tech[i] == 'h':
+        #     num_vp = int(suffix[suffix.find('h')+1:suffix.find('k')])
+        # else:
+        #     num_vp = int(suffix[suffix.find('k')+1:])
 
-        sample_kmeans = get_cluster_centroids(num_vp, [ip])
+        data = get_angles(np.load(ips[i]))
+        # sample_kmeans = get_cluster_centroids(num_vp, [ip])
 
         res = []
-        for pose in sample_kmeans.cluster_centers_:
+        # for pose in sample_kmeans.cluster_centers_:
+        for pose in data:
             res.append(neigh.predict([pose]))
 
         tally = {}
@@ -87,9 +89,6 @@ def classify_videos(ips, tech, ks_name, new_ids=False):
             else:
                 tally[m] += 1
 
-        # for w in sorted(tally, key=tally.get, reverse=True):
-        #     print(w, tally[w])
-            # final_res.append(tally.values())
         maxvote_move = max(tally, key=tally.get)
         final_res.append((maxvote_move, f'{tally[maxvote_move]}/{sum(tally.values())}'))
     return final_res
