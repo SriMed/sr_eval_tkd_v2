@@ -98,7 +98,41 @@ def print_res(ips, final_res):
     for ip, fr in zip(ips, final_res):
         print(f'{ip}\t|\t{fr[0]}\t{fr[1]}')
 
-ips = ['xy_Static/IMG_5002_si.npy', 'xy_Static/fk_rd_0_si.npy', 'xy_Static/fk_rd_1_si.npy']
-tech = ['h', 'k', 'k']
-res = classify_videos(ips, tech, f'ks-h{hand_vp}k{kick_vp}.p', new_ids=True)
-print_res(ips, res)
+# ips = ['xy_Static/IMG_5002_si.npy', 'xy_Static/fk_rd_0_si.npy', 'xy_Static/fk_rd_1_si.npy']
+# tech = ['h', 'k', 'k']
+# res = classify_videos(ips, tech, f'ks-h{hand_vp}k{kick_vp}.p', new_ids=True)
+# print_res(ips, res)
+
+def get_f1(prefix, pr):  # searching in pr for this prefix
+    tp = 0
+    fp = 0
+    tn = 0
+    fn = 0
+    for pred, res in pr:
+        if pred == res == prefix:
+            tp += 1
+        elif pred == prefix and res != prefix:
+            fp += 1
+        elif pred != prefix and res != prefix:
+            tn += 1
+        elif pred != prefix and res == prefix:
+            fn += 1
+    try:
+        precision = tp / (tp + fp)
+    except ZeroDivisionError:
+        precision = float("nan")
+    try:
+        recall = tp / (tp + fn)
+    except ZeroDivisionError:
+        recall = float("nan")
+    print(f'Precision: {precision}')
+    print(f'Recall: {recall}')
+    try:
+        f1 = 2 * (precision * recall) / (precision + recall)
+    except:
+        f1 = float("nan")
+    print(f'F1: {f1}')
+    return f1
+
+pr = pickle.load(open('../xy_Static/pr.p', 'rb'))
+f1 = get_f1('hb_l', pr)
